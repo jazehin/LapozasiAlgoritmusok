@@ -1,12 +1,10 @@
 ﻿using LapozasiAlgoritmusok.Algorithms;
-using System.Reflection.Metadata.Ecma335;
 using System.Text;
 
 namespace LapozasiAlgoritmusok
 {
     internal class Program
     {
-        static List<int> pages = new();
         static Algorithm usedAlgorithm = Algorithm.None;
         static BaseAlgorithm algorithm;
 
@@ -18,12 +16,12 @@ namespace LapozasiAlgoritmusok
             Console.ReadKey();
         }
 
-        private static void CreateClass(List<int> pages)
+        private static void CreateClass(List<int> processes)
         {
-            switch(usedAlgorithm)
+            switch (usedAlgorithm)
             {
                 case Algorithm.FIFO:
-                    algorithm = new FIFO(pages);
+                    algorithm = new FIFO(processes);
                     break;
                 default:
                     throw new NotImplementedException("Ezen algoritmus még nincs megvalósítva.");
@@ -75,12 +73,12 @@ namespace LapozasiAlgoritmusok
 
             } while (usedAlgorithm == Algorithm.None);
 
-            
+
         }
 
         private static List<int> ReadFile()
         {
-            List<int> pages = new List<int>();
+            List<int> processes = new List<int>();
 
             using StreamReader sr = new(@".\..\..\..\res\lapsor.txt", Encoding.UTF8);
 
@@ -94,10 +92,10 @@ namespace LapozasiAlgoritmusok
                     throw new Exception("Hibás érték került a lapsor.txt fájlba.");
                 }
 
-                pages.Add(page);
+                processes.Add(page);
             }
 
-            return pages;
+            return processes;
         }
     }
 
