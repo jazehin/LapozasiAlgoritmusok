@@ -1,0 +1,1 @@
+A /res mappában áll lehetõség módosítani a lapsort.
