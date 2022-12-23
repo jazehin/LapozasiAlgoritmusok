@@ -1,19 +1,20 @@
-﻿using LapozasiAlgoritmusok.Algorithms;
-using System.Text;
+﻿using LapozasiAlgoritmusok.algorithm_classes;
 
 namespace LapozasiAlgoritmusok
 {
     internal class Program
     {
         static Algorithm usedAlgorithm = Algorithm.None;
-        static BaseAlgorithm algorithm;
+        static BaseAlgorithm? algorithm = null;
+        public static int numberOfMemoryPlaces = 4;
 
         static void Main()
         {
             ChooseAlgorithm();
             CreateClass(ReadFile());
-            algorithm.Start();
-            Console.ReadKey();
+            algorithm?.Start();
+            Console.WriteLine("Folyamat befejezve.");
+            Console.ReadKey(true);
         }
 
         private static void CreateClass(List<int> processes)
@@ -22,6 +23,15 @@ namespace LapozasiAlgoritmusok
             {
                 case Algorithm.FIFO:
                     algorithm = new FIFO(processes);
+                    break;
+                case Algorithm.OPT:
+                    algorithm = new OPT(processes);
+                    break;
+                case Algorithm.LRU:
+                    algorithm = new LRU(processes);
+                    break;
+                case Algorithm.SC:
+                    algorithm = new SC(processes);
                     break;
                 default:
                     throw new NotImplementedException("Ezen algoritmus még nincs megvalósítva.");
@@ -78,18 +88,17 @@ namespace LapozasiAlgoritmusok
 
         private static List<int> ReadFile()
         {
-            List<int> processes = new List<int>();
+            List<int> processes = new();
 
-            using StreamReader sr = new(@".\..\..\..\res\lapsor.txt", Encoding.UTF8);
+            using StreamReader sr = new(@".\..\..\..\res\processes.txt", System.Text.Encoding.UTF8);
 
             while (!sr.EndOfStream)
             {
                 string? value = sr.ReadLine();
-                int page;
 
-                if (!int.TryParse(value, out page))
+                if (!int.TryParse(value, out int page))
                 {
-                    throw new Exception("Hibás érték került a lapsor.txt fájlba.");
+                    throw new Exception("Hibás érték került a processes.txt fájlba.");
                 }
 
                 processes.Add(page);
