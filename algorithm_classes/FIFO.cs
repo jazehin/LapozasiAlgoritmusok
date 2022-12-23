@@ -1,15 +1,15 @@
-﻿using LapozasiAlgoritmusok.Type;
+﻿using LapozasiAlgoritmusok.memory_classes;
 
-namespace LapozasiAlgoritmusok.Algorithms
+namespace LapozasiAlgoritmusok.algorithm_classes
 {
     internal class FIFO : BaseAlgorithm
     {
-        private FIFOQueue _queue;
+        private FIFOMemory _memory;
         public FIFO(List<int> processes)
         {
             _processes = processes;
             _numberOfPageFaults = 0;
-            _queue = new(_memoryPlaces);
+            _memory = new(_memoryPlaces);
             _place = 0;
         }
 
@@ -30,20 +30,11 @@ namespace LapozasiAlgoritmusok.Algorithms
             Print();
 
             int process = _processes[_place];
-            if (_queue.Length < _memoryPlaces)
+            if (_memory.Length < _memoryPlaces || !_memory.Contains(process))
             {
-                _queue.InsertElement(_processes[_place]);
+                _memory.InsertElement(process);
                 _numberOfPageFaults++;
                 Print();
-            }
-            else
-            {
-                if (!_queue.Contains(process))
-                {
-                    _queue.InsertElement(process);
-                    _numberOfPageFaults++;
-                    Print();
-                }
             }
 
             _place++;
@@ -61,7 +52,8 @@ namespace LapozasiAlgoritmusok.Algorithms
             Console.WriteLine("Memória:");
             for (int i = 0; i < _memoryPlaces; i++)
             {
-                Console.WriteLine($"{i + 1}. {_queue.GetElementAt(i)}");
+                int processNumber = _memory.GetElementAt(i);
+                Console.WriteLine($"{i + 1}. {(processNumber == 0 ? "-" : processNumber)}");
             }
 
             Console.WriteLine($"\nLaphibák száma: {_numberOfPageFaults}");
