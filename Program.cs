@@ -6,18 +6,16 @@ namespace LapozasiAlgoritmusok
     {
         static Algorithm usedAlgorithm = Algorithm.None;
         static BaseAlgorithm? algorithm = null;
-        public static int numberOfMemoryPlaces = 4;
+        public static readonly int numberOfMemoryPlaces = 4;
 
         static void Main()
         {
             ChooseAlgorithm();
-            CreateClass(ReadFile());
-            algorithm?.Start();
-            Console.WriteLine("Folyamat befejezve.");
-            Console.ReadKey(true);
+            RunAlgorithm(ReadFile());
+            Console.ReadKey(false);
         }
 
-        private static void CreateClass(List<int> processes)
+        private static void RunAlgorithm(List<int> processes)
         {
             switch (usedAlgorithm)
             {
@@ -36,6 +34,10 @@ namespace LapozasiAlgoritmusok
                 default:
                     throw new NotImplementedException("Ezen algoritmus még nincs megvalósítva.");
             }
+
+            algorithm.Start();
+
+            Console.WriteLine("\nFolyamat befejezve.");
         }
 
         public static string ListToString(List<int> list)

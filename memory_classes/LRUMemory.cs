@@ -1,12 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace LapozasiAlgoritmusok.memory_classes
 {
-    internal class OPTMemory : BaseMemory
+    internal class LRUMemory : BaseMemory
     {
         private List<int> _processes;
 
-        public OPTMemory(int capacity, List<int> processes)
+        public LRUMemory(int capacity, List<int> processes)
         {
             _array = new int[capacity];
             _processes = processes;
@@ -29,16 +33,15 @@ namespace LapozasiAlgoritmusok.memory_classes
 
         private int GetIndexToChange(int place)
         {
-            List<int> unusedProcesses = _processes.GetRange(place, _processes.Count - place);
+            List<int> usedProcesses = _processes.GetRange(0, place);
             List<int> order = new(4);
 
             for (int i = 0; i < _array.Length; i++)
             {
-                int numberToAddToList = unusedProcesses.IndexOf(_array[i]) == -1 ? int.MaxValue : unusedProcesses.IndexOf(_array[i]);
-                order.Add(numberToAddToList);
+                order.Add(usedProcesses.LastIndexOf(_array[i]));
             }
 
-            return order.IndexOf(order.Max());
+            return order.IndexOf(order.Min());
         }
     }
 }
