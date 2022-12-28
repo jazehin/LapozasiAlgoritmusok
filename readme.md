@@ -16,4 +16,4 @@ A **/res** mappában áll lehetõség módosítani a folyamatok listáját a **processes
 
 ## Fejlesztési lehetõségek
 - [ ] Lehetõséget adni a felhasználónak hogy összevethesse az algoritmusokat egy véletlenszerûen generált / elõre megadott folyamatlistával.
-- [ ] Megkérdezni a felhasználót a program futásának a végén, hogy szeretné-e újra lefuttatni.
+- [X] Megkérdezni a felhasználót a program futásának a végén, hogy szeretné-e újra lefuttatni.
