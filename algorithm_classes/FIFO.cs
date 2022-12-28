@@ -2,7 +2,7 @@
 
 namespace LapozasiAlgoritmusok.algorithm_classes
 {
-    internal class FIFO : BaseAlgorithm
+    internal class FIFO : BaseAlgorithm 
     {
         public FIFO(List<int> processes)
         {

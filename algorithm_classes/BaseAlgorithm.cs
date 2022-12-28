@@ -21,8 +21,7 @@ namespace LapozasiAlgoritmusok.algorithm_classes
         }
         public void Start()
         {
-            do
-            {
+            do {
                 Next();
             } while (!IsDone);
         }
@@ -39,7 +38,7 @@ namespace LapozasiAlgoritmusok.algorithm_classes
             Console.WriteLine("Memória:");
             for (int i = 0; i < _memoryPlaces; i++)
             {
-                Console.WriteLine($"{i + 1}. {_memory.GetElementAt(i)}");
+                Console.WriteLine($"{i + 1}. {_memory.ElementAt(i)}");
             }
 
             Console.WriteLine($"\nLaphibák száma: {_numberOfPageFaults}");

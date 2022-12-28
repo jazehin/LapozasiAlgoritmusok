@@ -7,11 +7,14 @@ namespace LapozasiAlgoritmusok.algorithm_classes
         private bool[] _referenceBits;
         public SC(List<int> processes)
         {
-            throw new NotImplementedException();
             _processes = processes;
             _numberOfPageFaults = 0;
-            _memory = new FIFOMemory(_memoryPlaces);
+            _memory = new SCMemory(_memoryPlaces);
             _referenceBits = new bool[_memoryPlaces];
+            for (int i = 0; i < _referenceBits.Length; i++)
+            {
+                _referenceBits[i] = true;
+            }
             _place = 0;
         }
 
@@ -22,12 +25,49 @@ namespace LapozasiAlgoritmusok.algorithm_classes
             int process = _processes[_place];
             if (_memory.NumberOfNotZeroElements < _memoryPlaces || !_memory.Contains(process))
             {
+                int indexToInsertInto = (_memory as SCMemory).IndexToInsertInto;
+
+                while (_referenceBits[indexToInsertInto])
+                {
+                    _referenceBits[indexToInsertInto] = false;
+                    (_memory as SCMemory).UpdateOrder();
+                    Print();
+                    indexToInsertInto = (_memory as SCMemory).IndexToInsertInto;
+                }
+
                 _memory.InsertElement(process);
+                _referenceBits[indexToInsertInto] = true;
                 _numberOfPageFaults++;
+                Print();
+            }
+            else if (_memory.Contains(process))
+            {
+                int indexToResetRefBit = _memory.IndexOf(process);
+                _referenceBits[indexToResetRefBit] = true;
                 Print();
             }
 
             _place++;
+        }
+
+        protected override void Print()
+        {
+            Console.Clear();
+            string algoText = $"{this.GetType().Name}: ";
+            Console.WriteLine($"{algoText}{Program.ListToString(_processes)}");
+
+            Console.SetCursorPosition(algoText.Length + _place * 3, Console.GetCursorPosition().Top);
+            Console.WriteLine("^\n");
+
+            Console.WriteLine("Memória:");
+            for (int i = 0; i < _memoryPlaces; i++)
+            {
+                Console.WriteLine($"{i + 1}. {_memory.ElementAt(i)} - referenciabit: {(_referenceBits[i] ? 1 : 0)}");
+            }
+
+            Console.WriteLine($"\nLaphibák száma: {_numberOfPageFaults}");
+
+            Console.ReadKey();
         }
     }
 }

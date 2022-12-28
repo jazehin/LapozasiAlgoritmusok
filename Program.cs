@@ -31,6 +31,8 @@ namespace LapozasiAlgoritmusok
                 case Algorithm.SC:
                     algorithm = new SC(processes);
                     break;
+                case Algorithm.All:
+                    throw new NotImplementedException("Még nem hasonlíthatóak össze az algoritmusok.");
                 default:
                     throw new NotImplementedException("Ezen algoritmus még nincs megvalósítva.");
             }
@@ -116,6 +118,7 @@ namespace LapozasiAlgoritmusok
         FIFO,
         LRU,
         OPT,
-        SC
+        SC,
+        All
     }
 }

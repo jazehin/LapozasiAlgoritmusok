@@ -5,12 +5,15 @@ A program célja demonstrálni a 4 órákon tanult lapcsere stratégiát:
 - OPT: optimal
 - SC: second chance
 
-Jelenleg a FIFO, az LRU és az OPT algoritmus van megvalósítva a 4 közül.
+Az összes tervezett algoritmus meg van megvalósítva a 4 közül.
 
 ## Mûködése
 A program elindítása után egy konzolos felület várja a felhasználót. Elsõ lépésben a fel-le nyilak illetve a W és az S billentyûk segítségével kiválaszthatja a használni kívánt algoritmust, majd az Enter, illetve Spacebar (szóköz) billentyûkkel véglegesítheti döntését.
 Ez után elindul az algoritmus mûködésének szemléltetése, melyet bármely billentyû lenyomásával lehet elõreléptetni.
-Fejlesztési lehetõség: a program lefutása után az megkérdezi a felhasználót, hogy le kívánja-e újra futtatni.
 
 ## A folyamatok módosítása
 A **/res** mappában áll lehetõség módosítani a folyamatok listáját a **processes.txt** fájlban. A folyamatok sorszámait külön sorokba kell beírni, mint ahogyan a példában is látható.
+
+## Fejlesztési lehetõségek
+- [ ] Lehetõséget adni a felhasználónak hogy összevethesse az algoritmusokat egy véletlenszerûen generált / elõre megadott folyamatlistával.
+- [ ] Megkérdezni a felhasználót a program futásának a végén, hogy szeretné-e újra lefuttatni.
