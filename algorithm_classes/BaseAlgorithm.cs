@@ -9,6 +9,7 @@ namespace LapozasiAlgoritmusok.algorithm_classes
         protected int _numberOfPageFaults;
         protected int _place;
         protected readonly int _memoryPlaces = Program.numberOfMemoryPlaces;
+        protected bool _runThrough;
 
         public int NumberOfPageFaults
         {
@@ -19,15 +20,18 @@ namespace LapozasiAlgoritmusok.algorithm_classes
         {
             get => _place >= _processes.Count;
         }
-        public void Start()
+        public int Start()
         {
             do {
                 Next();
             } while (!IsDone);
+            return NumberOfPageFaults;
         }
 
         protected virtual void Print() 
         {
+            if (_runThrough) return;
+
             Console.Clear();
             string algoText = $"{this.GetType().Name}: ";
             Console.WriteLine($"{algoText}{Program.ListToString(_processes)}");

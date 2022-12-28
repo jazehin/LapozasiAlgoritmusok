@@ -4,42 +4,58 @@ namespace LapozasiAlgoritmusok
 {
     internal class Program
     {
-        static Algorithm usedAlgorithm = Algorithm.None;
+        static Option usedAlgorithm = Option.FIFO;
+        static ComparisonType comparisonType = ComparisonType.RandomGenerált;
+        static Restart runAgain = Restart.Nem;
         static BaseAlgorithm? algorithm = null;
         public static readonly int numberOfMemoryPlaces = 4;
 
         static void Main()
         {
-            ChooseAlgorithm();
-            RunAlgorithm(ReadFile());
-            Console.ReadKey(false);
+            do {
+                usedAlgorithm = (Option)Choose(typeof(Option), "Válasszon lapcsere stratégiát:");
+                RunAlgorithm(ReadFile());
+                Console.WriteLine("\nFolyamat befejezve.");
+                Console.ReadKey(false);
+
+                runAgain = (Restart)Choose(typeof(Restart), "Szeretné újra lefuttatni a programot?");
+            } while (runAgain == Restart.Igen);
         }
 
         private static void RunAlgorithm(List<int> processes)
         {
             switch (usedAlgorithm)
             {
-                case Algorithm.FIFO:
+                case Option.FIFO:
                     algorithm = new FIFO(processes);
                     break;
-                case Algorithm.OPT:
+                case Option.OPT:
                     algorithm = new OPT(processes);
                     break;
-                case Algorithm.LRU:
+                case Option.LRU:
                     algorithm = new LRU(processes);
                     break;
-                case Algorithm.SC:
+                case Option.SC:
                     algorithm = new SC(processes);
                     break;
-                case Algorithm.All:
-                    throw new NotImplementedException("Még nem hasonlíthatóak össze az algoritmusok.");
+                case Option.Összevetés:
+                    comparisonType = (ComparisonType)Choose(typeof(ComparisonType), "Milyen módon szeretné őket összehasonlítani? (Random generált -> 100 véletlenszerű folyamattal; Előre megadott -> a fájlban megadott folyamatlistával)");
+                    Compare();
+                    break;
+                case Option.Kilépés:
+                    Environment.Exit(0);
+                    break;
                 default:
-                    throw new NotImplementedException("Ezen algoritmus még nincs megvalósítva.");
+                    throw new NotImplementedException("Ez a programrész még nincs megvalósítva.");
             }
 
+            if (algorithm is null) return;
             algorithm.Start();
+        }
 
-            Console.WriteLine("\nFolyamat befejezve.");
+        private static void Compare()
+        {
+            throw new NotImplementedException("Még nem hasonlíthatóak össze az algoritmusok.");
         }
 
         public static string ListToString(List<int> list)
@@ -54,40 +70,66 @@ namespace LapozasiAlgoritmusok
             return temp;
         }
 
-        private static void ChooseAlgorithm()
+        private static int Choose(Type type, string prompt)
         {
             int choice = 0;
-            string[] enumNames = Enum.GetNames(typeof(Algorithm));
+            bool choosen = false;
+            string[] enumNames = Enum.GetNames(type);
 
-            do
+            for (int i = 0; i < enumNames.Length; i++)
             {
-                Console.Clear();
-                Console.WriteLine("Válasszon lapcsere stratégiát/algoritmust:");
+                if (enumNames[i].ToUpper() == enumNames[i]) continue;
 
-                for (int i = 1; i < enumNames.Length; i++)
+                for (int j = 1; j < enumNames[i].Length; j++)
                 {
-                    Console.WriteLine($"- {enumNames[i]}{(choice == i - 1 ? "\t<" : "")}");
+                    string charAsString = enumNames[i][j].ToString();
+                    if (charAsString.ToUpper() == charAsString)
+                    {
+                        enumNames[i] = $"{enumNames[i].Substring(0, j)} {charAsString.ToLower()}{enumNames[i].Substring(j + 1)}";
+                    }
+                }
+            }
+
+            int longestNameLength = enumNames.Max(element => element.Length);
+
+            do {
+                Console.Clear();
+                Console.WriteLine(prompt);
+
+                for (int i = 0; i < enumNames.Length; i++)
+                {
+                    Console.WriteLine($"- {ExtendString(enumNames[i], longestNameLength)}{(choice == i ? " <" : "")}");
                 }
 
                 ConsoleKey key = Console.ReadKey().Key;
                 if (key == ConsoleKey.W || key == ConsoleKey.UpArrow)
                 {
                     choice--;
-                    if (choice == -1) choice = enumNames.Length - 2;
+                    if (choice == -1) choice = enumNames.Length - 1;
                 }
                 else if (key == ConsoleKey.S || key == ConsoleKey.DownArrow)
                 {
                     choice++;
-                    if (choice == enumNames.Length - 1) choice = 0;
+                    if (choice == enumNames.Length) choice = 0;
                 }
                 else if (key == ConsoleKey.Spacebar || key == ConsoleKey.Enter)
                 {
-                    usedAlgorithm = (Algorithm)(choice + 1);
+                    choosen = !choosen;
                 }
+            } while (!choosen);
 
-            } while (usedAlgorithm == Algorithm.None);
 
+            return choice;
+        }
 
+        private static string ExtendString(string str, int length)
+        {
+            for (int i = str.Length; i < length; i++)
+            {
+                str += ' ';
+            }
+
+            return str;
         }
 
         private static List<int> ReadFile()
@@ -112,13 +154,25 @@ namespace LapozasiAlgoritmusok
         }
     }
 
-    internal enum Algorithm
+    internal enum Option
     {
-        None,
         FIFO,
         LRU,
         OPT,
         SC,
-        All
+        Összevetés,
+        Kilépés
+    }
+
+    internal enum ComparisonType
+    {
+        ElőreMegadott,
+        RandomGenerált
+    }
+
+    internal enum Restart
+    {
+        Igen,
+        Nem
     }
 }

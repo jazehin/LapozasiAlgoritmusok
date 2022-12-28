@@ -4,12 +4,13 @@ namespace LapozasiAlgoritmusok.algorithm_classes
 {
     internal class LRU : BaseAlgorithm
     {
-        public LRU(List<int> processes)
+        public LRU(List<int> processes, bool runThrough = false)
         {
             _processes = processes;
             _numberOfPageFaults = 0;
             _memory = new LRUMemory(_memoryPlaces, _processes);
             _place = 0;
+            _runThrough = runThrough;
         }
 
         protected override void Next()

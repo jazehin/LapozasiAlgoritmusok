@@ -4,12 +4,13 @@ namespace LapozasiAlgoritmusok.algorithm_classes
 {
     internal class FIFO : BaseAlgorithm 
     {
-        public FIFO(List<int> processes)
+        public FIFO(List<int> processes, bool runThrough = false)
         {
             _processes = processes;
             _numberOfPageFaults = 0;
             _memory = new FIFOMemory(_memoryPlaces);
             _place = 0;
+            _runThrough = runThrough;
         }
 
         protected override void Next()

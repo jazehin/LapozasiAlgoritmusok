@@ -5,7 +5,7 @@ namespace LapozasiAlgoritmusok.algorithm_classes
     internal class SC : BaseAlgorithm
     {
         private bool[] _referenceBits;
-        public SC(List<int> processes)
+        public SC(List<int> processes, bool runThrough = false)
         {
             _processes = processes;
             _numberOfPageFaults = 0;
@@ -16,6 +16,7 @@ namespace LapozasiAlgoritmusok.algorithm_classes
                 _referenceBits[i] = true;
             }
             _place = 0;
+            _runThrough = runThrough;
         }
 
         protected override void Next()
@@ -52,6 +53,8 @@ namespace LapozasiAlgoritmusok.algorithm_classes
 
         protected override void Print()
         {
+            if (_runThrough) return;
+
             Console.Clear();
             string algoText = $"{this.GetType().Name}: ";
             Console.WriteLine($"{algoText}{Program.ListToString(_processes)}");
