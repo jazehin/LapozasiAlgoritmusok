@@ -1,4 +1,6 @@
 ﻿using LapozasiAlgoritmusok.algorithm_classes;
+using System.Linq.Expressions;
+using System.Runtime.Versioning;
 
 namespace LapozasiAlgoritmusok
 {
@@ -7,12 +9,14 @@ namespace LapozasiAlgoritmusok
         static Option usedAlgorithm = Option.FIFO;
         static ComparisonType comparisonType = ComparisonType.RandomGenerált;
         static Restart runAgain = Restart.Nem;
-        static BaseAlgorithm? algorithm = null;
+        static BaseAlgorithm? algorithm;
+        static readonly int numberOfRandomProcesses = 1000;
         public static readonly int numberOfMemoryPlaces = 4;
 
         static void Main()
         {
             do {
+                algorithm = null;
                 usedAlgorithm = (Option)Choose(typeof(Option), "Válasszon lapcsere stratégiát:");
                 RunAlgorithm(ReadFile());
                 Console.WriteLine("\nFolyamat befejezve.");
@@ -39,8 +43,8 @@ namespace LapozasiAlgoritmusok
                     algorithm = new SC(processes);
                     break;
                 case Option.Összevetés:
-                    comparisonType = (ComparisonType)Choose(typeof(ComparisonType), "Milyen módon szeretné őket összehasonlítani? (Random generált -> 100 véletlenszerű folyamattal; Előre megadott -> a fájlban megadott folyamatlistával)");
-                    Compare();
+                    comparisonType = (ComparisonType)Choose(typeof(ComparisonType), $"Milyen módon szeretné őket összehasonlítani?\n(Random generált -> {numberOfRandomProcesses} véletlenszerű folyamattal; Előre megadott -> a fájlban megadott folyamatlistával)");
+                    Compare(comparisonType == ComparisonType.ElőreMegadott ? processes : new List<int>());
                     break;
                 case Option.Kilépés:
                     Environment.Exit(0);
@@ -53,9 +57,69 @@ namespace LapozasiAlgoritmusok
             algorithm.Start();
         }
 
-        private static void Compare()
+        private static void Compare(List<int> processes)
         {
-            throw new NotImplementedException("Még nem hasonlíthatóak össze az algoritmusok.");
+            // if the user chose random generation, generate the processes here
+            if (processes.Count == 0)
+            {
+                Random rnd = new();
+                for (int i = 0; i < numberOfRandomProcesses; i++)
+                {
+                    processes.Add(rnd.Next(1, 6));
+                }
+            }
+
+            List<BaseAlgorithm> algorithms = GetAlgorithms(processes);
+            List<int> pageFaults = new();
+            List<double> times = new();
+
+            foreach (var algorithm in algorithms)
+            {
+                DateTime startDate = DateTime.Now;
+                pageFaults.Add(algorithm.Start());
+                DateTime endDate = DateTime.Now;
+                times.Add((endDate - startDate).TotalSeconds);
+            }
+
+            string algoNameString = "Algoritmus neve";
+            string pageFaultString = "Laphibák száma";
+            string requiredTimeString = "Szükséges idő (mp)";
+
+            int algoNameLength = Math.Max(
+                algorithms.Max(algorithm => algorithm.GetType().Name.Length), 
+                algoNameString.Length);
+            int pageFaultLength = Math.Max(
+                pageFaults.Max(number => number.ToString().Length), 
+                pageFaultString.Length);
+            int requiredTimeLength = Math.Max(
+                times.Max(time => time.ToString().Length),
+                requiredTimeString.Length);
+
+            Console.Clear();
+            Console.WriteLine($"--{ExtendString("", algoNameLength, '-')}---{ExtendString("", pageFaultLength, '-')}---{ExtendString("", requiredTimeLength, '-')}--");
+            Console.WriteLine($"| {ExtendString(algoNameString, algoNameLength, ' ')} | {ExtendString(pageFaultString, pageFaultLength, ' ')} | {ExtendString(requiredTimeString, requiredTimeLength, ' ')} |");
+
+            for (int i = 0; i < algorithms.Count; i++)
+            {
+                Console.WriteLine($"|-{ExtendString("", algoNameLength, '-')}-|-{ExtendString("", pageFaultLength, '-')}-|-{ExtendString("", requiredTimeLength, '-')}-|");
+                Console.WriteLine($"| {ExtendString(algorithms[i].GetType().Name, algoNameLength, ' ')} | {ExtendString(pageFaults[i].ToString(), pageFaultLength, ' ')} | {ExtendString(times[i].ToString(), requiredTimeLength, ' ')} |");
+            }
+
+            Console.WriteLine($"--{ExtendString("", algoNameLength, '-')}---{ExtendString("", pageFaultLength, '-')}---{ExtendString("", requiredTimeLength, '-')}--");
+
+        }
+
+        private static List<BaseAlgorithm> GetAlgorithms(List<int> processes)
+        {
+            List<BaseAlgorithm> list = new()
+            {
+                new FIFO(processes, true),
+                new LRU(processes, true),
+                new OPT(processes, true),
+                new SC(processes, true)
+            };
+
+            return list;
         }
 
         public static string ListToString(List<int> list)
@@ -98,7 +162,7 @@ namespace LapozasiAlgoritmusok
 
                 for (int i = 0; i < enumNames.Length; i++)
                 {
-                    Console.WriteLine($"- {ExtendString(enumNames[i], longestNameLength)}{(choice == i ? " <" : "")}");
+                    Console.WriteLine($"- {ExtendString(enumNames[i], longestNameLength, ' ')}{(choice == i ? " <" : "")}");
                 }
 
                 ConsoleKey key = Console.ReadKey().Key;
@@ -122,11 +186,11 @@ namespace LapozasiAlgoritmusok
             return choice;
         }
 
-        private static string ExtendString(string str, int length)
+        private static string ExtendString(string str, int length, char character)
         {
             for (int i = str.Length; i < length; i++)
             {
-                str += ' ';
+                str += character;
             }
 
             return str;

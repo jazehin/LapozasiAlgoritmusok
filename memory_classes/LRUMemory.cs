@@ -19,7 +19,7 @@ namespace LapozasiAlgoritmusok.memory_classes
         public override void InsertElement(int element, int place)
         {
             int numberOfEmptyMemoryPlaces = _array.Count(element => element == 0);
-            Console.WriteLine(numberOfEmptyMemoryPlaces);
+            //Console.WriteLine(numberOfEmptyMemoryPlaces);
             if (numberOfEmptyMemoryPlaces > 0)
             {
                 _array[Math.Abs(numberOfEmptyMemoryPlaces - 4)] = element;

@@ -23,7 +23,7 @@
             get => AsList.IndexOf(1);
         }
 
-        public int IndexOf(int element) => _array.ToList().IndexOf(element);
+        public new int IndexOf(int element) => _array.ToList().IndexOf(element);
 
         public override void InsertElement(int element)
         {

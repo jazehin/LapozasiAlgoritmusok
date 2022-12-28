@@ -15,5 +15,5 @@ Ez után elindul az algoritmus mûködésének szemléltetése, melyet bármely billenty
 A **/res** mappában áll lehetõség módosítani a folyamatok listáját a **processes.txt** fájlban. A folyamatok sorszámait külön sorokba kell beírni, mint ahogyan a példában is látható.
 
 ## Fejlesztési lehetõségek
-- [ ] Lehetõséget adni a felhasználónak hogy összevethesse az algoritmusokat egy véletlenszerûen generált / elõre megadott folyamatlistával.
+- [X] Lehetõséget adni a felhasználónak hogy összevethesse az algoritmusokat egy véletlenszerûen generált / elõre megadott folyamatlistával.
 - [X] Megkérdezni a felhasználót a program futásának a végén, hogy szeretné-e újra lefuttatni.
