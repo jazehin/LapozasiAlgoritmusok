@@ -1,11 +1,11 @@
 # Szoftverfejlesztés házi feladat: lapkezelõ algoritmusok
-A program célja demonstrálni a 4 órákon tanult lapcsere stratégiát:
+A program célja demonstrálni az órákon tanult 4 lapcsere stratégiát:
 - FIFO: first in, first out
 - LRU: least recently used
 - OPT: optimal
 - SC: second chance
 
-Az összes tervezett algoritmus meg van megvalósítva a 4 közül.
+Az összes tervezett algoritmus meg van valósítva a 4 közül.
 
 ## Mûködése
 A program elindítása után egy konzolos felület várja a felhasználót. Elsõ lépésben a fel-le nyilak illetve a W és az S billentyûk segítségével kiválaszthatja a használni kívánt algoritmust, majd az Enter, illetve Spacebar (szóköz) billentyûkkel véglegesítheti döntését.

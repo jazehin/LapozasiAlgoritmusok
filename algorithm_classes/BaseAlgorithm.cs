@@ -33,10 +33,27 @@ namespace LapozasiAlgoritmusok.algorithm_classes
             if (_runThrough) return;
 
             Console.Clear();
-            string algoText = $"{this.GetType().Name}: ";
-            Console.WriteLine($"{algoText}{Program.ListToString(_processes)}");
+            string firstLineText = $"{this.GetType().Name}: {Program.ListToString(_processes)}";
+            Console.WriteLine(firstLineText);
 
-            Console.SetCursorPosition(algoText.Length + _place * 3, Console.GetCursorPosition().Top);
+            int markerIndex = firstLineText.Length - 1;
+            int numberOfCommas = 0;
+            for (int i = 0; i < firstLineText.Length && markerIndex == firstLineText.Length - 1; i++)
+            {
+                if (firstLineText[i] == ',')
+                {
+                    if (numberOfCommas == _place)
+                    {
+                        markerIndex = i - 1;
+                    }
+                    else
+                    {
+                        numberOfCommas++;
+                    }
+                }
+            }
+
+            Console.SetCursorPosition(markerIndex, Console.GetCursorPosition().Top);
             Console.WriteLine("^\n");
 
             Console.WriteLine("Memória:");
